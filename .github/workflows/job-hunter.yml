@@ -1,12 +1,25 @@
-- run: node src/index.js
+name: Hourly Job Hunter
+on:
+  schedule:
+    - cron: '0 */3 * * *'
+  workflow_dispatch:
+
+jobs:
+  hunt:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+      - run: npm install
+      - name: Run Job Scraper
+        run: node src/index.js
         env:
-          # Keep these as secrets (Security)
           TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
           MONGO_URI: ${{ secrets.MONGO_URI }}
           SCRAPER_API_KEY: ${{ secrets.SCRAPER_API_KEY }}
-          
-          # Add these manually (Convenience)
           SEARCH_ROLES: "MERN Stack Developer, Backend Developer, Frontend Developer"
           KEYWORDS: "node,express,react,mongodb,javascript,java"
           LOCATION: "Remote,Work From Home"
